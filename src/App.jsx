@@ -201,7 +201,7 @@ export default function App() {
 
           <a
             className="cta-button"
-            href="https://wa.me/923000000000"
+            href="https://wa.me/923318484115"
             target="_blank"
             rel="noreferrer"
           >
