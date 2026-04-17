@@ -200,6 +200,12 @@ button {
   outline: none;
 }
 
+.field select,
+.field option {
+  background: #162331;
+  color: #fff7ed;
+}
+
 .field textarea {
   resize: vertical;
   min-height: 7rem;
