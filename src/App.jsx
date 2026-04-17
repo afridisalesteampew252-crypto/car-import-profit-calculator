@@ -25,6 +25,7 @@ const COUNTRY_PRESETS = {
 };
 
 const DEFAULT_MARGIN = 20;
+const WHATSAPP_NUMBER = "923318484115";
 
 function parseAmount(value) {
   const numeric = Number.parseFloat(value);
@@ -46,6 +47,7 @@ export default function App() {
   const [duty, setDuty] = useState("60");
   const [other, setOther] = useState("250");
   const [margin, setMargin] = useState(String(DEFAULT_MARGIN));
+  const [copied, setCopied] = useState(false);
 
   const numbers = useMemo(() => {
     const carPrice = parseAmount(price);
@@ -75,16 +77,56 @@ export default function App() {
     setOther(String(preset.misc));
   }
 
+  function resetForm() {
+    applyPreset(selectedCountry);
+    setPrice("");
+    setMargin(String(DEFAULT_MARGIN));
+    setCopied(false);
+  }
+
+  async function copySummary() {
+    const summary = [
+      "Afridi Trading Import Estimate",
+      `Country: ${COUNTRY_PRESETS[selectedCountry].label}`,
+      `Car price: ${formatMoney(parseAmount(price))}`,
+      `Shipping: ${formatMoney(parseAmount(shipping))}`,
+      `Duty: ${duty}%`,
+      `Other costs: ${formatMoney(parseAmount(other))}`,
+      `Total landed cost: ${formatMoney(numbers.landedCost)}`,
+      `Suggested selling price: ${formatMoney(numbers.suggestedPrice)}`,
+      `Estimated profit: ${formatMoney(numbers.estimatedProfit)}`,
+    ].join("\n");
+
+    try {
+      await navigator.clipboard.writeText(summary);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1800);
+    } catch {
+      setCopied(false);
+    }
+  }
+
   return (
     <main className="page-shell">
       <section className="hero-card">
-        <div className="hero-copy">
-          <p className="eyebrow">Afridi Trading Tools</p>
-          <h1>Car Import Profit Calculator</h1>
-          <p className="subtitle">
-            Check landed cost, selling price, and profit before you commit to an
-            import deal.
-          </p>
+        <div className="hero-topline">
+          <div className="hero-copy">
+            <p className="eyebrow">Afridi Trading Tools</p>
+            <h1>Car Import Profit Calculator</h1>
+            <p className="subtitle">
+              Check landed cost, selling price, and profit before you commit to
+              an import deal.
+            </p>
+          </div>
+
+          <a
+            className="hero-contact"
+            href={`https://wa.me/${WHATSAPP_NUMBER}`}
+            target="_blank"
+            rel="noreferrer"
+          >
+            WhatsApp Us
+          </a>
         </div>
 
         <div className="preset-row" role="tablist" aria-label="Country presets">
@@ -163,6 +205,15 @@ export default function App() {
               onChange={(event) => setMargin(event.target.value)}
             />
           </label>
+
+          <div className="action-row">
+            <button type="button" className="secondary-button" onClick={resetForm}>
+              Reset
+            </button>
+            <button type="button" className="primary-button" onClick={copySummary}>
+              {copied ? "Copied" : "Copy estimate"}
+            </button>
+          </div>
         </div>
 
         <div className="panel result-panel">
@@ -199,14 +250,25 @@ export default function App() {
             </div>
           </div>
 
+          <div className="contact-card">
+            <span>Need help importing this vehicle?</span>
+            <strong>Afridi Trading</strong>
+            <p>WhatsApp or call us for sourcing, shipping, and import support.</p>
+          </div>
+
           <a
             className="cta-button"
-            href="https://wa.me/923318484115"
+            href={`https://wa.me/${WHATSAPP_NUMBER}`}
             target="_blank"
             rel="noreferrer"
           >
             Import This Car With Us
           </a>
+
+          <p className="disclaimer">
+            Estimates only. Final import costs may vary by auction grade,
+            inspection fees, port charges, exchange rate, and local taxes.
+          </p>
         </div>
       </section>
     </main>

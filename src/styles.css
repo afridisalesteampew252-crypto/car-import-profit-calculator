@@ -43,6 +43,13 @@ a {
   border-radius: 28px;
 }
 
+.hero-topline {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
 .eyebrow {
   margin: 0 0 0.75rem;
   font-family: "IBM Plex Mono", monospace;
@@ -65,6 +72,19 @@ a {
   font-size: 1.02rem;
   line-height: 1.7;
   margin: 1rem 0 0;
+}
+
+.hero-contact {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 10rem;
+  text-decoration: none;
+  color: #111827;
+  background: #f4efe6;
+  border-radius: 999px;
+  padding: 0.9rem 1.1rem;
+  font-weight: 700;
 }
 
 .preset-row {
@@ -160,6 +180,32 @@ a {
   box-shadow: 0 0 0 4px rgba(246, 189, 96, 0.12);
 }
 
+.action-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.primary-button,
+.secondary-button {
+  border: 0;
+  border-radius: 16px;
+  padding: 0.95rem 1rem;
+  cursor: pointer;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, #f6bd60, #ff7a59);
+  color: #111827;
+  font-weight: 700;
+}
+
+.secondary-button {
+  background: rgba(255, 255, 255, 0.08);
+  color: #f7f2e8;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
 .summary-list {
   display: grid;
   gap: 0.9rem;
@@ -204,6 +250,36 @@ a {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.contact-card {
+  margin-top: 1rem;
+  border-radius: 18px;
+  padding: 1rem 1.05rem;
+  background: rgba(246, 189, 96, 0.08);
+  border: 1px solid rgba(246, 189, 96, 0.18);
+}
+
+.contact-card span,
+.contact-card strong,
+.contact-card p {
+  display: block;
+}
+
+.contact-card span,
+.disclaimer {
+  color: rgba(247, 242, 232, 0.7);
+}
+
+.contact-card strong {
+  margin-top: 0.2rem;
+  font-size: 1.1rem;
+}
+
+.contact-card p {
+  margin: 0.55rem 0 0;
+  color: rgba(247, 242, 232, 0.82);
+  line-height: 1.5;
+}
+
 .cta-button {
   display: inline-flex;
   justify-content: center;
@@ -218,9 +294,19 @@ a {
   font-weight: 700;
 }
 
+.disclaimer {
+  margin: 0.85rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
 @media (max-width: 860px) {
   .calculator-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hero-topline {
+    flex-direction: column;
   }
 }
 
@@ -237,6 +323,10 @@ a {
   }
 
   .breakdown {
+    grid-template-columns: 1fr;
+  }
+
+  .action-row {
     grid-template-columns: 1fr;
   }
 
