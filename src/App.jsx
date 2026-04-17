@@ -145,9 +145,7 @@ export default function App() {
   const [other, setOther] = useState("250");
   const [margin, setMargin] = useState(String(DEFAULT_MARGIN));
 
-  const [carCurrency, setCarCurrency] = useState("USD");
-  const [shippingCurrency, setShippingCurrency] = useState("USD");
-  const [otherCurrency, setOtherCurrency] = useState("USD");
+  const [inputCurrency, setInputCurrency] = useState("USD");
   const [displayCurrency, setDisplayCurrency] = useState("USD");
 
   const [usdRate, setUsdRate] = useState("1");
@@ -179,9 +177,9 @@ export default function App() {
     const dutyRate = parseAmount(duty);
     const profitMargin = parseAmount(margin);
 
-    const priceUsd = convertToUsd(priceRaw, carCurrency, rates);
-    const shippingUsd = convertToUsd(shippingRaw, shippingCurrency, rates);
-    const otherUsd = convertToUsd(otherRaw, otherCurrency, rates);
+    const priceUsd = convertToUsd(priceRaw, inputCurrency, rates);
+    const shippingUsd = convertToUsd(shippingRaw, inputCurrency, rates);
+    const otherUsd = convertToUsd(otherRaw, inputCurrency, rates);
 
     const dutyAmountUsd = (priceUsd * dutyRate) / 100;
     const landedCostUsd = priceUsd + shippingUsd + dutyAmountUsd + otherUsd;
@@ -215,9 +213,7 @@ export default function App() {
     other,
     duty,
     margin,
-    carCurrency,
-    shippingCurrency,
-    otherCurrency,
+    inputCurrency,
     displayCurrency,
     rates,
   ]);
@@ -234,9 +230,7 @@ export default function App() {
     applyPreset(destination);
     setCarPrice("");
     setMargin(String(DEFAULT_MARGIN));
-    setCarCurrency("USD");
-    setShippingCurrency("USD");
-    setOtherCurrency("USD");
+    setInputCurrency("USD");
     setDisplayCurrency("USD");
   }
 
@@ -244,10 +238,11 @@ export default function App() {
     const lines = [
       "Afridi Trading Universal Import Estimate",
       `Destination: ${DESTINATION_PRESETS[destination].label}`,
-      `Car price: ${formatMoney(parseAmount(carPrice), carCurrency)}`,
-      `Shipping: ${formatMoney(parseAmount(shipping), shippingCurrency)}`,
+      `Input currency: ${inputCurrency}`,
+      `Car price: ${formatMoney(parseAmount(carPrice), inputCurrency)}`,
+      `Shipping: ${formatMoney(parseAmount(shipping), inputCurrency)}`,
       `Duty: ${duty}%`,
-      `Other costs: ${formatMoney(parseAmount(other), otherCurrency)}`,
+      `Other costs: ${formatMoney(parseAmount(other), inputCurrency)}`,
       `Landed cost: ${formatMoney(numbers.landedCostDisplay, displayCurrency)}`,
       `Suggested selling price: ${formatMoney(numbers.suggestedPriceDisplay, displayCurrency)}`,
       `Estimated profit: ${formatMoney(numbers.estimatedProfitDisplay, displayCurrency)}`,
@@ -364,6 +359,20 @@ export default function App() {
             </label>
 
             <label className="field">
+              <span>Input currency</span>
+              <select
+                value={inputCurrency}
+                onChange={(event) => setInputCurrency(event.target.value)}
+              >
+                {Object.keys(CURRENCIES).map((currency) => (
+                  <option key={currency} value={currency}>
+                    {currency}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="field">
               <span>Display currency</span>
               <select
                 value={displayCurrency}
@@ -378,83 +387,38 @@ export default function App() {
             </label>
           </div>
 
-          <div className="field-combo">
-            <label className="field">
-              <span>Car price</span>
-              <input
-                type="number"
-                min="0"
-                placeholder="10000"
-                value={carPrice}
-                onChange={(event) => setCarPrice(event.target.value)}
-              />
-            </label>
-            <label className="field currency-field">
-              <span>Currency</span>
-              <select
-                value={carCurrency}
-                onChange={(event) => setCarCurrency(event.target.value)}
-              >
-                {Object.keys(CURRENCIES).map((currency) => (
-                  <option key={currency} value={currency}>
-                    {currency}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
+          <label className="field">
+            <span>Car price</span>
+            <input
+              type="number"
+              min="0"
+              placeholder="10000"
+              value={carPrice}
+              onChange={(event) => setCarPrice(event.target.value)}
+            />
+          </label>
 
-          <div className="field-combo">
-            <label className="field">
-              <span>Shipping</span>
-              <input
-                type="number"
-                min="0"
-                placeholder="1200"
-                value={shipping}
-                onChange={(event) => setShipping(event.target.value)}
-              />
-            </label>
-            <label className="field currency-field">
-              <span>Currency</span>
-              <select
-                value={shippingCurrency}
-                onChange={(event) => setShippingCurrency(event.target.value)}
-              >
-                {Object.keys(CURRENCIES).map((currency) => (
-                  <option key={currency} value={currency}>
-                    {currency}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
+          <label className="field">
+            <span>Shipping</span>
+            <input
+              type="number"
+              min="0"
+              placeholder="1200"
+              value={shipping}
+              onChange={(event) => setShipping(event.target.value)}
+            />
+          </label>
 
-          <div className="field-combo">
-            <label className="field">
-              <span>Other costs</span>
-              <input
-                type="number"
-                min="0"
-                placeholder="250"
-                value={other}
-                onChange={(event) => setOther(event.target.value)}
-              />
-            </label>
-            <label className="field currency-field">
-              <span>Currency</span>
-              <select
-                value={otherCurrency}
-                onChange={(event) => setOtherCurrency(event.target.value)}
-              >
-                {Object.keys(CURRENCIES).map((currency) => (
-                  <option key={currency} value={currency}>
-                    {currency}
-                  </option>
-                ))}
-              </select>
-            </label>
-          </div>
+          <label className="field">
+            <span>Other costs</span>
+            <input
+              type="number"
+              min="0"
+              placeholder="250"
+              value={other}
+              onChange={(event) => setOther(event.target.value)}
+            />
+          </label>
 
           <div className="field-grid">
             <label className="field">
